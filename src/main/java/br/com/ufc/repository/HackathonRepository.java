@@ -12,9 +12,11 @@ import java.util.List;
 @Repository
 public interface HackathonRepository extends JpaRepository<Hackathon, Long> {
 
-    @Query("SELECT hack FROM Hackathon hack JOIN hack.organizerHackathonList ohl JOIN ohl.organizer org WHERE org.id=:organizerId")
+//    @Query("SELECT hack FROM Hackathon hack JOIN hack.organizerHackathonList ohl JOIN ohl.organizer org WHERE org.id=:organizerId")
+    @Query("SELECT hack FROM Hackathon hack JOIN hack.organizers org WHERE org.id=:organizerId")
     List<Hackathon> findAllHackathonsByOrganizer(@Param("organizerId")Long organizerId, Pageable pageable);
 
-    @Query("SELECT hack FROM Hackathon hack JOIN hack.organizerHackathonList ohl JOIN ohl.organizer org WHERE org.id=:organizerId AND hack.id=:hackathonId")
+//    @Query("SELECT hack FROM Hackathon hack JOIN hack.organizerHackathonList ohl JOIN ohl.organizer org WHERE org.id=:organizerId AND hack.id=:hackathonId")
+    @Query("SELECT hack FROM Hackathon hack JOIN hack.organizers org WHERE org.id=:organizerId AND hack.id=:hackathonId")
     Hackathon findHackathonByOrganizer(@Param("hackathonId") Long hackathonId, @Param("organizerId")Long organizerId);
 }

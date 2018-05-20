@@ -1,5 +1,6 @@
 package br.com.ufc.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -12,8 +13,8 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-public class User extends AbstractEntity implements UserDetails {
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+public abstract class User extends AbstractEntity implements UserDetails {
 
     @NotNull
     @NotEmpty
@@ -99,6 +100,7 @@ public class User extends AbstractEntity implements UserDetails {
         this.shirtSize = shirtSize;
     }
 
+    @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.papers;
@@ -109,31 +111,37 @@ public class User extends AbstractEntity implements UserDetails {
         return this.password;
     }
 
+    @JsonIgnore
     @Override
     public String getUsername() {
         return this.email;
     }
 
+    @JsonIgnore
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isEnabled() {
         return true;
     }
 
+    @JsonIgnore
     public boolean isOrganizer() {
         return this.papers.contains(Paper.ORGANIZER);
     }

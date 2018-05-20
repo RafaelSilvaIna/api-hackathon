@@ -39,12 +39,11 @@ public class Hackathon extends AbstractEntity{
     @Column
     private Boolean openSubscriptions;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "hackathon", cascade = CascadeType.REMOVE)
-    private List<OrganizerHackathon>  organizerHackathonList;
+    @ManyToMany(cascade = CascadeType.MERGE)
+    private List<Organizer> organizers;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "hackathon", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "hackathon", cascade = CascadeType.MERGE)
     private  List<Team> teamList;
 
     public String getNameEvent() {
@@ -95,12 +94,12 @@ public class Hackathon extends AbstractEntity{
         this.numberTeams = numberTeams;
     }
 
-    public List<OrganizerHackathon> getOrganizerHackathonList() {
-        return organizerHackathonList;
+    public List<Organizer> getOrganizers() {
+        return organizers;
     }
 
-    public void setOrganizerHackathonList(List<OrganizerHackathon> organizerHackathonList) {
-        this.organizerHackathonList = organizerHackathonList;
+    public void setOrganizers(List<Organizer> organizers) {
+        this.organizers = organizers;
     }
 
     public List<Team> getTeamList() {

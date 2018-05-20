@@ -1,10 +1,7 @@
 package br.com.ufc.service.impl;
 
-import br.com.ufc.model.Hackathon;
-import br.com.ufc.model.Organizer;
-import br.com.ufc.model.OrganizerHackathon;
-import br.com.ufc.repository.HackathonRepository;
-import br.com.ufc.repository.OrganizerRepository;
+import br.com.ufc.model.*;
+import br.com.ufc.repository.*;
 import br.com.ufc.service.HackathonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -24,31 +21,26 @@ public class HackathonServiceImpl implements HackathonService {
     @Autowired
     OrganizerRepository organizerRepository;
 
+    @Autowired
+    ParticipantRepository participantRepository;
+
+    @Autowired
+    TeamRepository teamRepository;
+
     @Override
-    @Transactional(propagation = Propagation.REQUIRED)
     public Hackathon save(Hackathon hackathon, Long idOrganizer) {
 
         Organizer organizer = organizerRepository.findById(idOrganizer).get();
         hackathon.setOpenSubscriptions(true);
         hackathon.setDate(new Date(System.currentTimeMillis()));
-        hackathon.setOrganizerHackathonList(new ArrayList<OrganizerHackathon>());
+        hackathon.setOrganizers(new ArrayList<Organizer>());
 
-        OrganizerHackathon organizerHackathon = new OrganizerHackathon();
-        organizerHackathon.setHackathon(hackathon);
-        organizerHackathon.setOrganizer(organizer);
-
-        if(organizer.getOrganizerHackathonList() != null) {
-            organizer.getOrganizerHackathonList().add(organizerHackathon);
-        } else {
-            organizer.setOrganizerHackathonList(new ArrayList<OrganizerHackathon>());
-            organizer.getOrganizerHackathonList().add(organizerHackathon);
+        if(organizer.getHackathons() == null) {
+            organizer.setHackathons(new ArrayList<Hackathon>());
         }
-
-        hackathon.getOrganizerHackathonList().add(organizerHackathon);
-
+        organizer.getHackathons().add(hackathon);
+        hackathon.getOrganizers().add(organizer);
         hackathonRepository.save(hackathon);
-        organizerRepository.save(organizer);
-
         return hackathon;
     }
 
@@ -65,9 +57,75 @@ public class HackathonServiceImpl implements HackathonService {
     @Override
     public void deleteHackathonByOrganizer(Long hackathonId, Long organizerId) {
         Hackathon hackathon = hackathonRepository.findHackathonByOrganizer(hackathonId, organizerId);
+        Organizer organizer = organizerRepository.findById(organizerId).get();
 
-        if(hackathon != null)
+        if(hackathon != null) {
+            organizer.getHackathons().remove(hackathon);
+            hackathon.getOrganizers().remove(organizer);
             hackathonRepository.delete(hackathon);
+        }
+    }
+
+    @Override
+    public Team subscribeTeamInHackathon(Long hackathonId, Long participantId, SubscribeTeam subscribeTeam) {
+
+        Participant teamBoss = participantRepository.findById(participantId).get();
+
+        Email emailBoss = new Email(teamBoss.getEmail());
+
+        if(!subscribeTeam.getParticipantsEmails().contains(emailBoss)) {
+            subscribeTeam.getParticipantsEmails().add(emailBoss);
+        }
+
+        Hackathon hackathon = hackathonRepository.findById(hackathonId).get();
+
+        Team team = new Team();
+        team.setParticipants(new ArrayList<Participant>());
+        team.setName(subscribeTeam.getNameTeam());
+        team.setHackathon(hackathon);
+
+        for (Email email : subscribeTeam.getParticipantsEmails()) {
+            Participant participant = participantRepository.findByEmail(email.getEmail());
+
+            team.getParticipants().add(participant);
+
+            if(participant.getTeams() == null) {
+                participant.setTeams(new ArrayList<Team>());
+            }
+            participant.getTeams().add(team);
+        }
+
+        team.setHackathon(hackathon);
+
+        teamRepository.save(team);
+
+        if(hackathon.getTeamList() == null) {
+            hackathon.setTeamList(new ArrayList<Team>());
+        }
+
+        hackathon.getTeamList().add(team);
+
+        hackathonRepository.save(hackathon);
+
+        return team;
+    }
+
+    @Override
+    public Hackathon updateHackathonByOrganizer(Long hackathonId, Long organizerId, Hackathon hackathon) {
+        Hackathon hackathonPersist = getHackathonByOrganizer(hackathonId, organizerId);
+
+        if(hackathonPersist != null) {
+            hackathonPersist.setDescription(hackathon.getDescription());
+            hackathonPersist.setLocal(hackathon.getLocal());
+            hackathonPersist.setNameEvent(hackathon.getNameEvent());
+            hackathonPersist.setNumberParticipantsTeam(hackathon.getNumberParticipantsTeam());
+            hackathonPersist.setNumberTeams(hackathon.getNumberTeams());
+            hackathonPersist.setOpenSubscriptions(hackathon.getOpenSubscriptions());
+
+            hackathonRepository.save(hackathonPersist);
+            return  hackathonPersist;
+        }
+        return null;
     }
 
 

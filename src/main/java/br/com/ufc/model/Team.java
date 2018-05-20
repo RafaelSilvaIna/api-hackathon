@@ -1,9 +1,8 @@
 package br.com.ufc.model;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -15,8 +14,12 @@ public class Team extends AbstractEntity{
     @NotEmpty
     private String name;
 
-    @OneToMany(mappedBy = "team", cascade = CascadeType.MERGE)
-    private List<ParticipantTeam> participantTeams;
+//    @JsonIgnore
+//    @OneToMany(mappedBy = "team", cascade = CascadeType.MERGE)
+//    private List<ParticipantTeam> participantTeams;
+    @JsonIgnore
+    @ManyToMany(cascade = CascadeType.MERGE)
+    private  List<Participant> participants;
 
     @ManyToOne(optional = false)
     private Hackathon hackathon;
@@ -29,12 +32,21 @@ public class Team extends AbstractEntity{
         this.name = name;
     }
 
-    public List<ParticipantTeam> getParticipantTeams() {
-        return participantTeams;
+//    public List<ParticipantTeam> getParticipantTeams() {
+//        return participantTeams;
+//    }
+//
+//    public void setParticipantTeams(List<ParticipantTeam> participantTeams) {
+//        this.participantTeams = participantTeams;
+//    }
+
+
+    public List<Participant> getParticipants() {
+        return participants;
     }
 
-    public void setParticipantTeams(List<ParticipantTeam> participantTeams) {
-        this.participantTeams = participantTeams;
+    public void setParticipants(List<Participant> participants) {
+        this.participants = participants;
     }
 
     public Hackathon getHackathon() {
