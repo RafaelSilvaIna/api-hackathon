@@ -9,22 +9,9 @@ import java.util.List;
 
 @Entity
 public class Participant extends User{
-
-//    @JsonIgnore
-//    @OneToMany(mappedBy = "participant", cascade = CascadeType.MERGE)
-//    private List<ParticipantTeam> participantTeamList;
     @JsonIgnore
     @ManyToMany(cascade = CascadeType.MERGE)
     private List<Team> teams;
-
-//    public List<ParticipantTeam> getParticipantTeamList() {
-//        return participantTeamList;
-//    }
-//
-//    public void setParticipantTeamList(List<ParticipantTeam> participantTeamList) {
-//        this.participantTeamList = participantTeamList;
-//    }
-
 
     public List<Team> getTeams() {
         return teams;

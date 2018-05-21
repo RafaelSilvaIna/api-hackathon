@@ -14,13 +14,10 @@ public class Team extends AbstractEntity{
     @NotEmpty
     private String name;
 
-//    @JsonIgnore
-//    @OneToMany(mappedBy = "team", cascade = CascadeType.MERGE)
-//    private List<ParticipantTeam> participantTeams;
-    @JsonIgnore
     @ManyToMany(cascade = CascadeType.MERGE)
     private  List<Participant> participants;
 
+    @JsonIgnore
     @ManyToOne(optional = false)
     private Hackathon hackathon;
 
@@ -31,15 +28,6 @@ public class Team extends AbstractEntity{
     public void setName(String name) {
         this.name = name;
     }
-
-//    public List<ParticipantTeam> getParticipantTeams() {
-//        return participantTeams;
-//    }
-//
-//    public void setParticipantTeams(List<ParticipantTeam> participantTeams) {
-//        this.participantTeams = participantTeams;
-//    }
-
 
     public List<Participant> getParticipants() {
         return participants;

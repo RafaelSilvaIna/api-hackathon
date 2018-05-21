@@ -1,6 +1,7 @@
 package br.com.ufc.controller;
 
 
+import br.com.ufc.bundle.SubscribeTeamRequestBodyBundle;
 import br.com.ufc.model.*;
 import br.com.ufc.service.HackathonService;
 import br.com.ufc.service.OrganizerService;
@@ -12,7 +13,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 
 @RestController
@@ -37,6 +37,11 @@ public class HackathonController {
         return new ResponseEntity<>(hackathonService.getAllHackathonsByOrganizer(pageable, organizerId), HttpStatus.OK);
     }
 
+    @GetMapping("/ptcp")
+    public ResponseEntity<?> listAllHackathonsActive(Pageable pageable) {
+        return new ResponseEntity<>(hackathonService.listAllHackathonsActive(pageable), HttpStatus.OK);
+    }
+
     @GetMapping("/ognz/{hackathonId}")
     public ResponseEntity<Hackathon> getHackathonByOrganizer(@PathVariable("hackathonId") Long hackathonId, Authentication authentication) {
         Long organizerId = ((Organizer) authentication.getPrincipal()).getId();
@@ -54,13 +59,6 @@ public class HackathonController {
     public  ResponseEntity<Hackathon> updateHackathonByOrganizer(@PathVariable("hackathonId") Long hackathonId, @RequestBody Hackathon hackathon, Authentication authentication) {
         Long organizerId = ((Organizer) authentication.getPrincipal()).getId();
         return new ResponseEntity<Hackathon>(hackathonService.updateHackathonByOrganizer(hackathonId, organizerId, hackathon), HttpStatus.OK);
-    }
-
-    @PostMapping("/ptcp/subscribe-team/{hackathonId}")
-    public ResponseEntity<?> subscribeTeamInHackathon(@PathVariable("hackathonId") Long hackathonId, @RequestBody SubscribeTeam subscribeTeam, Authentication authentication) {
-        Long participantId = ((Participant) authentication.getPrincipal()).getId();
-        hackathonService.subscribeTeamInHackathon(hackathonId, participantId, subscribeTeam);
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

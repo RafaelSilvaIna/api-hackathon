@@ -1,15 +1,15 @@
-package br.com.ufc.model;
+package br.com.ufc.bundle;
 
 import java.util.Objects;
 
-public class Email {
+public class EmailRequestBodyBundle {
     private String email;
 
-    public Email(String email) {
+    public EmailRequestBodyBundle(String email) {
         this.email = email;
     }
 
-    public Email() {
+    public EmailRequestBodyBundle() {
     }
 
     public String getEmail() {
@@ -22,7 +22,7 @@ public class Email {
 
     @Override
     public String toString() {
-        return "Email{" +
+        return "EmailRequestBodyBundle{" +
                 "email='" + email + '\'' +
                 '}';
     }
@@ -31,7 +31,7 @@ public class Email {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Email email1 = (Email) o;
+        EmailRequestBodyBundle email1 = (EmailRequestBodyBundle) o;
         return Objects.equals(email, email1.email);
     }
 

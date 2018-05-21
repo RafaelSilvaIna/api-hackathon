@@ -1,13 +1,13 @@
 package br.com.ufc.service.impl;
 
+import br.com.ufc.bundle.EmailRequestBodyBundle;
+import br.com.ufc.bundle.SubscribeTeamRequestBodyBundle;
 import br.com.ufc.model.*;
 import br.com.ufc.repository.*;
 import br.com.ufc.service.HackathonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -31,7 +31,8 @@ public class HackathonServiceImpl implements HackathonService {
     public Hackathon save(Hackathon hackathon, Long idOrganizer) {
 
         Organizer organizer = organizerRepository.findById(idOrganizer).get();
-        hackathon.setOpenSubscriptions(true);
+
+        hackathon.setOpenSubscriptions(Boolean.TRUE);
         hackathon.setDate(new Date(System.currentTimeMillis()));
         hackathon.setOrganizers(new ArrayList<Organizer>());
 
@@ -50,6 +51,11 @@ public class HackathonServiceImpl implements HackathonService {
     }
 
     @Override
+    public List<Hackathon> listAllHackathonsActive(Pageable pageable) {
+        return hackathonRepository.listAllHackathonsActive(pageable);
+    }
+
+    @Override
     public Hackathon getHackathonByOrganizer(Long hackathonId, Long organizerId) {
         return hackathonRepository.findHackathonByOrganizer(hackathonId, organizerId);
     }
@@ -58,56 +64,20 @@ public class HackathonServiceImpl implements HackathonService {
     public void deleteHackathonByOrganizer(Long hackathonId, Long organizerId) {
         Hackathon hackathon = hackathonRepository.findHackathonByOrganizer(hackathonId, organizerId);
         Organizer organizer = organizerRepository.findById(organizerId).get();
-
         if(hackathon != null) {
+            if(hackathon.getTeamList() != null) {
+                for(Team team : hackathon.getTeamList()) {
+                    for(Participant participant : team.getParticipants()) {
+                        participant.getTeams().remove(team);
+                    }
+                    teamRepository.deleteById(team.getId());
+                }
+                hackathon.getTeamList().removeAll(hackathon.getTeamList());
+            }
             organizer.getHackathons().remove(hackathon);
             hackathon.getOrganizers().remove(organizer);
             hackathonRepository.delete(hackathon);
         }
-    }
-
-    @Override
-    public Team subscribeTeamInHackathon(Long hackathonId, Long participantId, SubscribeTeam subscribeTeam) {
-
-        Participant teamBoss = participantRepository.findById(participantId).get();
-
-        Email emailBoss = new Email(teamBoss.getEmail());
-
-        if(!subscribeTeam.getParticipantsEmails().contains(emailBoss)) {
-            subscribeTeam.getParticipantsEmails().add(emailBoss);
-        }
-
-        Hackathon hackathon = hackathonRepository.findById(hackathonId).get();
-
-        Team team = new Team();
-        team.setParticipants(new ArrayList<Participant>());
-        team.setName(subscribeTeam.getNameTeam());
-        team.setHackathon(hackathon);
-
-        for (Email email : subscribeTeam.getParticipantsEmails()) {
-            Participant participant = participantRepository.findByEmail(email.getEmail());
-
-            team.getParticipants().add(participant);
-
-            if(participant.getTeams() == null) {
-                participant.setTeams(new ArrayList<Team>());
-            }
-            participant.getTeams().add(team);
-        }
-
-        team.setHackathon(hackathon);
-
-        teamRepository.save(team);
-
-        if(hackathon.getTeamList() == null) {
-            hackathon.setTeamList(new ArrayList<Team>());
-        }
-
-        hackathon.getTeamList().add(team);
-
-        hackathonRepository.save(hackathon);
-
-        return team;
     }
 
     @Override
