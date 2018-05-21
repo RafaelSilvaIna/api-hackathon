@@ -10,7 +10,7 @@ import java.util.List;
 @Entity
 public class Participant extends User{
     @JsonIgnore
-    @ManyToMany(cascade = CascadeType.MERGE)
+    @ManyToMany(mappedBy = "participants")
     private List<Team> teams;
 
     public List<Team> getTeams() {

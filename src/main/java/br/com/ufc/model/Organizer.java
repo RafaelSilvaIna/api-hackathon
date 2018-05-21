@@ -12,7 +12,8 @@ import java.util.List;
 public class Organizer extends User{
 
     @JsonIgnore
-    @ManyToMany(cascade = CascadeType.MERGE)
+    @JoinTable(name = "organizer_hackathon", joinColumns = @JoinColumn(name = "organizer_id"), inverseJoinColumns = @JoinColumn(name = "hackathon_id"))
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Hackathon> hackathons;
 
 //    @JsonIgnore

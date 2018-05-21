@@ -1,4 +1,4 @@
-package error;
+package br.com.ufc.error;
 
 public class ErrorDetails {
     private String title;

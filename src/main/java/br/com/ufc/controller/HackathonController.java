@@ -1,11 +1,11 @@
 package br.com.ufc.controller;
 
 
-import br.com.ufc.bundle.SubscribeTeamRequestBodyBundle;
 import br.com.ufc.model.*;
 import br.com.ufc.service.HackathonService;
 import br.com.ufc.service.OrganizerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,20 +26,20 @@ public class HackathonController {
     OrganizerService organizerService;
 
     @PostMapping("/ognz")
-    public ResponseEntity<?> addHackathonByOrganizer(@Valid @RequestBody Hackathon hackathon, Authentication authentication) {
+    public ResponseEntity<Hackathon> addHackathonByOrganizer(@Valid @RequestBody Hackathon hackathon, Authentication authentication) {
         Long organizerId = ((Organizer) authentication.getPrincipal()).getId();
-        return new ResponseEntity<>(hackathonService.save(hackathon, organizerId), HttpStatus.CREATED);
+        return new ResponseEntity<Hackathon>(hackathonService.save(hackathon, organizerId), HttpStatus.CREATED);
     }
 
     @GetMapping("/ognz")
-    public ResponseEntity<?> listAllHackathonsByOrganizer(Pageable pageable, Authentication authentication) {
+    public ResponseEntity<Page<Hackathon>> listAllHackathonsByOrganizer(Pageable pageable, Authentication authentication) {
         Long organizerId = ((Organizer) authentication.getPrincipal()).getId();
         return new ResponseEntity<>(hackathonService.getAllHackathonsByOrganizer(pageable, organizerId), HttpStatus.OK);
     }
 
     @GetMapping("/ptcp")
-    public ResponseEntity<?> listAllHackathonsActive(Pageable pageable) {
-        return new ResponseEntity<>(hackathonService.listAllHackathonsActive(pageable), HttpStatus.OK);
+    public ResponseEntity<Page<Hackathon>> listAllHackathonsActive(Pageable pageable) {
+        return new ResponseEntity<Page<Hackathon>>(hackathonService.listAllHackathonsActive(pageable), HttpStatus.OK);
     }
 
     @GetMapping("/ognz/{hackathonId}")
@@ -55,10 +55,10 @@ public class HackathonController {
         return  new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PutMapping("/ognz/{hackathonId}")
-    public  ResponseEntity<Hackathon> updateHackathonByOrganizer(@PathVariable("hackathonId") Long hackathonId, @RequestBody Hackathon hackathon, Authentication authentication) {
+    @PutMapping("/ognz")
+    public  ResponseEntity<Hackathon> updateHackathonByOrganizer(@Valid @RequestBody Hackathon hackathon, Authentication authentication) {
         Long organizerId = ((Organizer) authentication.getPrincipal()).getId();
-        return new ResponseEntity<Hackathon>(hackathonService.updateHackathonByOrganizer(hackathonId, organizerId, hackathon), HttpStatus.OK);
+        return new ResponseEntity<Hackathon>(hackathonService.updateHackathonByOrganizer(organizerId, hackathon), HttpStatus.OK);
     }
 
 }

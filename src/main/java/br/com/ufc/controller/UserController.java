@@ -20,11 +20,4 @@ public class UserController {
     public ResponseEntity<?> listAll() {
         return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);
     }
-
-//
-//    @PostMapping("/organizer")
-//    public  ResponseEntity<?> save(@Valid @RequestBody User user) {
-//        user.setOrganizer(false);
-//        return  new ResponseEntity<>(userService.save(user), HttpStatus.OK);
-//    }
 }

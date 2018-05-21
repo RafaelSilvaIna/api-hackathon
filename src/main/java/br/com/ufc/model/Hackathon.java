@@ -1,9 +1,6 @@
 package br.com.ufc.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -39,12 +36,12 @@ public class Hackathon extends AbstractEntity{
     @Column
     private Boolean openSubscriptions;
 
-    @ManyToMany(cascade = CascadeType.MERGE)
+    @ManyToMany(mappedBy = "hackathons", cascade = CascadeType.ALL)
     private List<Organizer> organizers;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "hackathon", cascade = CascadeType.MERGE)
-    private  List<Team> teamList;
+    @OneToMany(mappedBy = "hackathon", cascade = CascadeType.ALL)
+    private  List<Team> teams;
 
     public String getNameEvent() {
         return nameEvent;
@@ -102,12 +99,12 @@ public class Hackathon extends AbstractEntity{
         this.organizers = organizers;
     }
 
-    public List<Team> getTeamList() {
-        return teamList;
+    public List<Team> getTeams() {
+        return teams;
     }
 
-    public void setTeamList(List<Team> teamList) {
-        this.teamList = teamList;
+    public void setTeams(List<Team> teams) {
+        this.teams = teams;
     }
 
     public Boolean getOpenSubscriptions() {

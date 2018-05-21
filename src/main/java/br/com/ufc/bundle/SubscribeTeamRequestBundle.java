@@ -2,18 +2,18 @@ package br.com.ufc.bundle;
 
 import java.util.List;
 
-public class SubscribeTeamRequestBodyBundle {
+public class SubscribeTeamRequestBundle {
     private String nameTeam;
-    private List<EmailRequestBodyBundle> participantsEmails;
+    private List<EmailRequestBundle> participantsEmails;
     private Long hackathonId;
 
-    public SubscribeTeamRequestBodyBundle(String nameTeam, List<EmailRequestBodyBundle> participantsEmails, Long hackathonId) {
+    public SubscribeTeamRequestBundle(String nameTeam, List<EmailRequestBundle> participantsEmails, Long hackathonId) {
         this.nameTeam = nameTeam;
         this.participantsEmails = participantsEmails;
         this.hackathonId = hackathonId;
     }
 
-    public SubscribeTeamRequestBodyBundle() {
+    public SubscribeTeamRequestBundle() {
     }
 
     public String getNameTeam() {
@@ -24,11 +24,11 @@ public class SubscribeTeamRequestBodyBundle {
         this.nameTeam = nameTeam;
     }
 
-    public List<EmailRequestBodyBundle> getParticipantsEmails() {
+    public List<EmailRequestBundle> getParticipantsEmails() {
         return participantsEmails;
     }
 
-    public void setParticipantsEmails(List<EmailRequestBodyBundle> participantsEmails) {
+    public void setParticipantsEmails(List<EmailRequestBundle> participantsEmails) {
         this.participantsEmails = participantsEmails;
     }
 

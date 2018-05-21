@@ -1,6 +1,7 @@
 package br.com.ufc.repository;
 
 import br.com.ufc.model.Hackathon;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -12,14 +13,12 @@ import java.util.List;
 @Repository
 public interface HackathonRepository extends JpaRepository<Hackathon, Long> {
 
-//    @Query("SELECT hack FROM Hackathon hack JOIN hack.organizerHackathonList ohl JOIN ohl.organizer org WHERE org.id=:organizerId")
     @Query("SELECT hack FROM Hackathon hack JOIN hack.organizers org WHERE org.id=:organizerId")
-    List<Hackathon> findAllHackathonsByOrganizer(@Param("organizerId")Long organizerId, Pageable pageable);
+    Page<Hackathon> findAllHackathonsByOrganizer(@Param("organizerId")Long organizerId, Pageable pageable);
 
     @Query("FROM Hackathon hack WHERE hack.openSubscriptions=true")
-    List<Hackathon> listAllHackathonsActive(Pageable pageable);
+    Page<Hackathon> listAllHackathonsActive(Pageable pageable);
 
-//    @Query("SELECT hack FROM Hackathon hack JOIN hack.organizerHackathonList ohl JOIN ohl.organizer org WHERE org.id=:organizerId AND hack.id=:hackathonId")
     @Query("SELECT hack FROM Hackathon hack JOIN hack.organizers org WHERE org.id=:organizerId AND hack.id=:hackathonId")
     Hackathon findHackathonByOrganizer(@Param("hackathonId") Long hackathonId, @Param("organizerId")Long organizerId);
 }

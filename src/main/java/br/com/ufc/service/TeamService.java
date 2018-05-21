@@ -1,14 +1,14 @@
 package br.com.ufc.service;
 
-import br.com.ufc.bundle.SubscribeTeamRequestBodyBundle;
+import br.com.ufc.bundle.SubscribeTeamRequestBundle;
 import br.com.ufc.model.Team;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface TeamService {
-    List<Team> listAllTeamsByHackathonByOrganizer(Long organizerId, Long hackathonId);
+    Page<Team> listAllTeamsByHackathonByOrganizer(Pageable pageable, Long organizerId, Long hackathonId);
 
-    Team subscribeTeamInHackathon(SubscribeTeamRequestBodyBundle subscribeTeam);
+    Team subscribeTeamInHackathon(SubscribeTeamRequestBundle subscribeTeam);
 
-    void unsubscribeTeamInHackathon(Long participantId, Long teamId);
+    Boolean unsubscribeTeamInHackathon(Long participantId, Long teamId);
 }

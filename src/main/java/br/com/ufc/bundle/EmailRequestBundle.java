@@ -2,14 +2,14 @@ package br.com.ufc.bundle;
 
 import java.util.Objects;
 
-public class EmailRequestBodyBundle {
+public class EmailRequestBundle {
     private String email;
 
-    public EmailRequestBodyBundle(String email) {
+    public EmailRequestBundle(String email) {
         this.email = email;
     }
 
-    public EmailRequestBodyBundle() {
+    public EmailRequestBundle() {
     }
 
     public String getEmail() {
@@ -22,7 +22,7 @@ public class EmailRequestBodyBundle {
 
     @Override
     public String toString() {
-        return "EmailRequestBodyBundle{" +
+        return "EmailRequestBundle{" +
                 "email='" + email + '\'' +
                 '}';
     }
@@ -31,7 +31,7 @@ public class EmailRequestBodyBundle {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        EmailRequestBodyBundle email1 = (EmailRequestBodyBundle) o;
+        EmailRequestBundle email1 = (EmailRequestBundle) o;
         return Objects.equals(email, email1.email);
     }
 
