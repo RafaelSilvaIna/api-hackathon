@@ -1,4 +1,3 @@
 # Desafio GreenMile
 
-Este documento reúne informações particulares a API desenvoldida como solução para o desafio proposto.
-
+Repositório destinado a resolução do desafio proposto pela GreenMile.
