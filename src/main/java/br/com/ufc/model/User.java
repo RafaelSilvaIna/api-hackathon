@@ -30,8 +30,7 @@ public abstract class User extends AbstractEntity implements UserDetails {
     @NotEmpty
     private String password;
 
-    @NotNull
-    @NotEmpty
+    @JsonIgnore
     private  String photo;
 
     @ElementCollection(targetClass = Paper.class, fetch = FetchType.EAGER)

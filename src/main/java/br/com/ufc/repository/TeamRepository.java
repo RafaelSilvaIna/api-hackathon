@@ -15,13 +15,13 @@ import java.util.List;
 public interface TeamRepository extends JpaRepository<Team, Long> {
 
     @Query("FROM Team t WHERE t.hackathon.id=:hackathonId")
-    Page<Team> listAllTeamsByHackathonByOrganizer(Pageable pageable, @Param("hackathonId") Long hackathonId);
+    Page<Team> listAllTeamsInHackathonByOrganizer(Pageable pageable, @Param("hackathonId") Long hackathonId);
 
     @Query("FROM  Team t JOIN t.participants p WHERE p.id=:participantId AND t.id=:teamId")
     Team findTeamByParticipant(@Param("teamId") Long teamId, @Param("participantId") Long participantId);
 
     @Query("SELECT p FROM Team t JOIN t.participants p WHERE t.hackathon.id=:hackathonId AND p.email=:emailParticipant")
-    Participant findParticipantByNameTeam(@Param("hackathonId") Long hackathonId, @Param("emailParticipant") String emailParticipant);
+    Participant findParticipantWithNameEqualInOtherTeamsOfHackathon(@Param("hackathonId") Long hackathonId, @Param("emailParticipant") String emailParticipant);
 
     Team findByName(String name);
 }

@@ -13,6 +13,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 @RestController
@@ -56,7 +59,7 @@ public class HackathonController {
     }
 
     @PutMapping("/ognz")
-    public  ResponseEntity<Hackathon> updateHackathonByOrganizer(@Valid @RequestBody Hackathon hackathon, Authentication authentication) {
+    public  ResponseEntity<Hackathon> updateHackathonByOrganizer(@Valid @RequestBody Hackathon hackathon, Authentication authentication) throws ParseException {
         Long organizerId = ((Organizer) authentication.getPrincipal()).getId();
         return new ResponseEntity<Hackathon>(hackathonService.updateHackathonByOrganizer(organizerId, hackathon), HttpStatus.OK);
     }

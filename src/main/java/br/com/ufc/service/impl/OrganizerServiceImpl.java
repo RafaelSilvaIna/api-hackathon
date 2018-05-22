@@ -16,6 +16,7 @@ public class OrganizerServiceImpl implements OrganizerService {
 
     @Override
     public Organizer save(Organizer organizer) {
+        organizer.setPhoto("default.png");
         organizer.addPaper(Paper.PARTICIPANT);
         organizer.addPaper(Paper.ORGANIZER);
         organizer.setPassword(new BCryptPasswordEncoder().encode(organizer.getPassword()));

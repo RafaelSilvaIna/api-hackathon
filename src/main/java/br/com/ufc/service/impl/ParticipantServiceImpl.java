@@ -15,6 +15,7 @@ public class ParticipantServiceImpl implements ParticipantService {
 
     @Override
     public Participant save(Participant participant) {
+        participant.setPhoto("default.png");
         participant.addPaper(Paper.PARTICIPANT);
         participant.setPassword(new BCryptPasswordEncoder().encode(participant.getPassword()));
         return participantRepository.save(participant);

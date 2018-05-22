@@ -74,4 +74,5 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
         return new ResponseEntity<>(validationErrorDetails, HttpStatus.BAD_REQUEST);
     }
+
 }

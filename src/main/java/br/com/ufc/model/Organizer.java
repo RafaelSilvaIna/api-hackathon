@@ -16,18 +16,6 @@ public class Organizer extends User{
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Hackathon> hackathons;
 
-//    @JsonIgnore
-//    @OneToMany(mappedBy = "organizer", cascade = CascadeType.MERGE)
-//    private List<OrganizerHackathon> organizerHackathonList;
-//
-//    public List<OrganizerHackathon> getOrganizerHackathonList() {
-//        return organizerHackathonList;
-//    }
-//
-//    public void setOrganizerHackathonList(List<OrganizerHackathon> organizerHackathonList) {
-//        this.organizerHackathonList = organizerHackathonList;
-//    }
-
     public List<Hackathon> getHackathons() {
         return hackathons;
     }

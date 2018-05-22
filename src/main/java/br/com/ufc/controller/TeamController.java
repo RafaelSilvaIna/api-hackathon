@@ -1,7 +1,7 @@
 package br.com.ufc.controller;
 
-import br.com.ufc.bundle.EmailRequestBundle;
-import br.com.ufc.bundle.SubscribeTeamRequestBundle;
+import br.com.ufc.model.Email;
+import br.com.ufc.model.SubscribeTeam;
 import br.com.ufc.model.Organizer;
 import br.com.ufc.model.Participant;
 import br.com.ufc.model.Team;
@@ -27,9 +27,9 @@ public class TeamController {
     }
 
     @PostMapping("/ptcp/subscribe-team/hackathon/{hackathonId}")
-    public ResponseEntity<Team> subscribeTeamInHackathon(@PathVariable("hackathonId") Long hackathonId, @RequestBody SubscribeTeamRequestBundle subscribeTeam, Authentication authentication) {
+    public ResponseEntity<Team> subscribeTeamInHackathon(@PathVariable("hackathonId") Long hackathonId, @RequestBody SubscribeTeam subscribeTeam, Authentication authentication) {
         subscribeTeam.setHackathonId(hackathonId);
-        EmailRequestBundle emailBoss = new EmailRequestBundle(((Participant) authentication.getPrincipal()).getEmail());
+        Email emailBoss = new Email(((Participant) authentication.getPrincipal()).getEmail());
 
         if(!subscribeTeam.getParticipantsEmails().contains(emailBoss)) {
             subscribeTeam.getParticipantsEmails().add(emailBoss);
@@ -39,9 +39,8 @@ public class TeamController {
     }
 
     @DeleteMapping("/ptcp/unsubscribe-team/{teamId}")
-    public ResponseEntity<?> unsubscribeTeamInHackathon(@PathVariable("teamId") Long teamId, Authentication authentication) {
+    public ResponseEntity<Boolean> unsubscribeTeamInHackathon(@PathVariable("teamId") Long teamId, Authentication authentication) {
         Long participantId = ((Participant) authentication.getPrincipal()).getId();
-        teamService.unsubscribeTeamInHackathon(participantId, teamId);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(teamService.unsubscribeTeamInHackathon(participantId, teamId),HttpStatus.OK);
     }
 }

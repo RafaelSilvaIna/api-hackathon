@@ -1,9 +1,7 @@
 package br.com.ufc.config;
 
-import br.com.ufc.model.Paper;
 import br.com.ufc.service.impl.CustomUserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,8 +9,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
-
-import static br.com.ufc.util.SecurityConstants.*;
 
 
 @EnableWebSecurity
@@ -26,7 +22,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues())
                 .and().csrf().disable()
                 .authorizeRequests()
-                .antMatchers(SIGN_UP_URL).permitAll()
+                .antMatchers("/participants/sign-up").permitAll()
                 .antMatchers("/organizers/**").permitAll()
                 .antMatchers("/*/ptcp/**").hasRole("PARTICIPANT")
                 .antMatchers("/*/ognz/**").hasRole("ORGANIZER")

@@ -1,5 +1,6 @@
 package br.com.ufc.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -25,6 +26,7 @@ public class Hackathon extends AbstractEntity{
     private String local;
 
     @DateTimeFormat(pattern = "dd/MM/yyyy")
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private Date date;
 
     @NotNull
@@ -36,6 +38,7 @@ public class Hackathon extends AbstractEntity{
     @Column
     private Boolean openSubscriptions;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "hackathons", cascade = CascadeType.ALL)
     private List<Organizer> organizers;
 

@@ -1,19 +1,19 @@
-package br.com.ufc.bundle;
+package br.com.ufc.model;
 
 import java.util.List;
 
-public class SubscribeTeamRequestBundle {
+public class SubscribeTeam {
     private String nameTeam;
-    private List<EmailRequestBundle> participantsEmails;
+    private List<Email> participantsEmails;
     private Long hackathonId;
 
-    public SubscribeTeamRequestBundle(String nameTeam, List<EmailRequestBundle> participantsEmails, Long hackathonId) {
+    public SubscribeTeam(String nameTeam, List<Email> participantsEmails, Long hackathonId) {
         this.nameTeam = nameTeam;
         this.participantsEmails = participantsEmails;
         this.hackathonId = hackathonId;
     }
 
-    public SubscribeTeamRequestBundle() {
+    public SubscribeTeam() {
     }
 
     public String getNameTeam() {
@@ -24,11 +24,11 @@ public class SubscribeTeamRequestBundle {
         this.nameTeam = nameTeam;
     }
 
-    public List<EmailRequestBundle> getParticipantsEmails() {
+    public List<Email> getParticipantsEmails() {
         return participantsEmails;
     }
 
-    public void setParticipantsEmails(List<EmailRequestBundle> participantsEmails) {
+    public void setParticipantsEmails(List<Email> participantsEmails) {
         this.participantsEmails = participantsEmails;
     }
 
