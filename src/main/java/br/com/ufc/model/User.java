@@ -11,10 +11,15 @@ import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class User extends AbstractEntity implements UserDetails {
+public abstract class User implements UserDetails {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     @NotNull
     @NotEmpty
@@ -46,6 +51,17 @@ public abstract class User extends AbstractEntity implements UserDetails {
     @NotNull
     @NotEmpty
     private String shirtSize;
+
+    public User() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -150,5 +166,21 @@ public abstract class User extends AbstractEntity implements UserDetails {
             this.papers = new ArrayList<Paper>();
         }
         this.papers.add(paper);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id) &&
+                Objects.equals(name, user.name) &&
+                Objects.equals(email, user.email);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(id, name, email);
     }
 }

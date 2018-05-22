@@ -1,6 +1,6 @@
 package br.com.ufc.config;
 
-import br.com.ufc.service.impl.CustomUserDetailService;
+import br.com.ufc.service.implementation.CustomUserDetailService;
 import io.jsonwebtoken.Jwts;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

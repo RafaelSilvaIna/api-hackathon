@@ -16,6 +16,9 @@ public class Organizer extends User{
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Hackathon> hackathons;
 
+    public Organizer() {
+    }
+
     public List<Hackathon> getHackathons() {
         return hackathons;
     }

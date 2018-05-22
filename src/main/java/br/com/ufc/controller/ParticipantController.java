@@ -1,12 +1,10 @@
 package br.com.ufc.controller;
 
-import br.com.ufc.model.Paper;
 import br.com.ufc.model.Participant;
 import br.com.ufc.service.ParticipantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -19,7 +17,7 @@ public class ParticipantController {
     ParticipantService participantService;
 
     @PostMapping("/sign-up")
-    public ResponseEntity<?> save(@Valid @RequestBody Participant participant) {
-        return new ResponseEntity<>(participantService.save(participant), HttpStatus.CREATED);
+    public ResponseEntity<?> saveParticipant(@Valid @RequestBody Participant participant) {
+        return new ResponseEntity<>(participantService.saveParticipant(participant), HttpStatus.CREATED);
     }
 }

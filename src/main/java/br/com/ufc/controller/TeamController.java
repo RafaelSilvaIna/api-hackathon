@@ -1,7 +1,7 @@
 package br.com.ufc.controller;
 
-import br.com.ufc.model.Email;
-import br.com.ufc.model.SubscribeTeam;
+import br.com.ufc.dto.EmailDTO;
+import br.com.ufc.dto.SubscribeTeamDTO;
 import br.com.ufc.model.Organizer;
 import br.com.ufc.model.Participant;
 import br.com.ufc.model.Team;
@@ -20,27 +20,27 @@ public class TeamController {
     @Autowired
     TeamService teamService;
 
-    @GetMapping("/ognz/hackathon/{hackathonId}")
-    public ResponseEntity<Page<Team>> listAllTeamsByHackathonByOrganizer(Pageable pageable, @PathVariable("hackathonId") Long hackathonId, Authentication authentication) {
+    @GetMapping("/organizer/hackathon/{hackathonId}")
+    public ResponseEntity<Page<Team>> getTeamsFromHackathon(Pageable pageable, @PathVariable("hackathonId") Long hackathonId, Authentication authentication) {
         Long organizerId = ((Organizer) authentication.getPrincipal()).getId();
-        return new ResponseEntity<Page<Team>>(teamService.listAllTeamsByHackathonByOrganizer(pageable, organizerId, hackathonId), HttpStatus.OK);
+        return new ResponseEntity<Page<Team>>(teamService.getTeamsFromHackathon(pageable, organizerId, hackathonId), HttpStatus.OK);
     }
 
-    @PostMapping("/ptcp/subscribe-team/hackathon/{hackathonId}")
-    public ResponseEntity<Team> subscribeTeamInHackathon(@PathVariable("hackathonId") Long hackathonId, @RequestBody SubscribeTeam subscribeTeam, Authentication authentication) {
+    @PostMapping("/participant/subscribe-team/hackathon/{hackathonId}")
+    public ResponseEntity<Team> subscribeTeam(@PathVariable("hackathonId") Long hackathonId, @RequestBody SubscribeTeamDTO subscribeTeam, Authentication authentication) {
         subscribeTeam.setHackathonId(hackathonId);
-        Email emailBoss = new Email(((Participant) authentication.getPrincipal()).getEmail());
+        EmailDTO emailBoss = new EmailDTO(((Participant) authentication.getPrincipal()).getEmail());
 
         if(!subscribeTeam.getParticipantsEmails().contains(emailBoss)) {
             subscribeTeam.getParticipantsEmails().add(emailBoss);
         }
 
-        return new ResponseEntity<Team>(teamService.subscribeTeamInHackathon(subscribeTeam), HttpStatus.OK);
+        return new ResponseEntity<Team>(teamService.subscribeTeam(subscribeTeam), HttpStatus.OK);
     }
 
-    @DeleteMapping("/ptcp/unsubscribe-team/{teamId}")
-    public ResponseEntity<Boolean> unsubscribeTeamInHackathon(@PathVariable("teamId") Long teamId, Authentication authentication) {
+    @DeleteMapping("/participant/unsubscribe-team/{teamId}")
+    public ResponseEntity<Boolean> unsubscribeTeam(@PathVariable("teamId") Long teamId, Authentication authentication) {
         Long participantId = ((Participant) authentication.getPrincipal()).getId();
-        return new ResponseEntity<>(teamService.unsubscribeTeamInHackathon(participantId, teamId),HttpStatus.OK);
+        return new ResponseEntity<>(teamService.unsubscribeTeam(participantId, teamId),HttpStatus.OK);
     }
 }

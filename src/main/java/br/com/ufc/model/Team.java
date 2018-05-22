@@ -9,9 +9,14 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
-public class Team extends AbstractEntity{
+public class Team {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     @NotNull
     @NotEmpty
@@ -28,6 +33,17 @@ public class Team extends AbstractEntity{
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     @JsonFormat(pattern = "dd/MM/yyyy")
     private Date date;
+
+    public Team() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -59,5 +75,21 @@ public class Team extends AbstractEntity{
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Team team = (Team) o;
+        return Objects.equals(id, team.id) &&
+                Objects.equals(name, team.name) &&
+                Objects.equals(date, team.date);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(id, name, date);
     }
 }

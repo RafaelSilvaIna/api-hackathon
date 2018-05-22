@@ -9,9 +9,14 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
-public class Hackathon extends AbstractEntity{
+public class Hackathon {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     @NotNull
     @NotEmpty
@@ -45,6 +50,17 @@ public class Hackathon extends AbstractEntity{
     @JsonIgnore
     @OneToMany(mappedBy = "hackathon", cascade = CascadeType.ALL)
     private  List<Team> teams;
+
+    public Hackathon() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getNameEvent() {
         return nameEvent;
@@ -116,5 +132,25 @@ public class Hackathon extends AbstractEntity{
 
     public void setOpenSubscriptions(Boolean openSubscriptions) {
         this.openSubscriptions = openSubscriptions;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Hackathon hackathon = (Hackathon) o;
+        return Objects.equals(id, hackathon.id) &&
+                Objects.equals(nameEvent, hackathon.nameEvent) &&
+                Objects.equals(description, hackathon.description) &&
+                Objects.equals(local, hackathon.local) &&
+                Objects.equals(date, hackathon.date) &&
+                Objects.equals(numberParticipantsTeam, hackathon.numberParticipantsTeam) &&
+                Objects.equals(numberTeams, hackathon.numberTeams);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(id, nameEvent, description, local, date, numberParticipantsTeam, numberTeams);
     }
 }

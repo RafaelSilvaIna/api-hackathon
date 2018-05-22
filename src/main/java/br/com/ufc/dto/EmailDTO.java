@@ -1,15 +1,15 @@
-package br.com.ufc.model;
+package br.com.ufc.dto;
 
 import java.util.Objects;
 
-public class Email {
+public class EmailDTO {
     private String emailAddress;
 
-    public Email(String email) {
+    public EmailDTO(String email) {
         this.emailAddress = email;
     }
 
-    public Email() {
+    public EmailDTO() {
     }
 
     public String getEmailAddress() {
@@ -22,7 +22,7 @@ public class Email {
 
     @Override
     public String toString() {
-        return "Email{" +
+        return "EmailDTO{" +
                 "emailAddress='" + emailAddress + '\'' +
                 '}';
     }
@@ -31,7 +31,7 @@ public class Email {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Email email1 = (Email) o;
+        EmailDTO email1 = (EmailDTO) o;
         return Objects.equals(emailAddress, email1.emailAddress);
     }
 

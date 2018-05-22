@@ -1,7 +1,7 @@
-package br.com.ufc.service.impl;
+package br.com.ufc.service.implementation;
 
-import br.com.ufc.model.Email;
-import br.com.ufc.model.SubscribeTeam;
+import br.com.ufc.dto.EmailDTO;
+import br.com.ufc.dto.SubscribeTeamDTO;
 import br.com.ufc.error.TeamMembersLimitExceededException;
 import br.com.ufc.model.Hackathon;
 import br.com.ufc.model.Participant;
@@ -22,7 +22,7 @@ import java.util.Date;
 import java.util.Optional;
 
 @Service
-public class TeamServiceImpl implements TeamService {
+public class TeamServiceImplementation implements TeamService {
     @Autowired
     TeamRepository teamRepository;
 
@@ -33,33 +33,27 @@ public class TeamServiceImpl implements TeamService {
     ParticipantRepository participantRepository;
 
     @Override
-    public Page<Team> listAllTeamsByHackathonByOrganizer(Pageable pageable, Long organizerId, Long hackathonId) {
+    public Page<Team> getTeamsFromHackathon(Pageable pageable, Long organizerId, Long hackathonId) {
 
-        Hackathon hackathon = hackathonRepository.findHackathonByOrganizer(hackathonId, organizerId);
+        Hackathon hackathon = hackathonRepository.getHackathonFromOrganizer(hackathonId, organizerId);
 
         if(hackathon == null) {
             throw new ResourceNotFoundException("Hackathon não encontrado no sistema");
         }
 
-        return teamRepository.listAllTeamsInHackathonByOrganizer(pageable, hackathonId);
+        return teamRepository.findTeamsFromHackathon(pageable, hackathonId);
     }
 
     @Override
-    public Team subscribeTeamInHackathon(SubscribeTeam subscribeTeam) {
-
+    public Team subscribeTeam(SubscribeTeamDTO subscribeTeam) {
 
         Optional<Hackathon> hackathonOptional = hackathonRepository.findById(subscribeTeam.getHackathonId());
 
-        Hackathon hackathon = null;
-
-        if(hackathonOptional.isPresent()) {
-            hackathon = hackathonOptional.get();
-        }
-
-        if(hackathon == null) {
+        if(!hackathonOptional.isPresent()) {
             throw new ResourceNotFoundException("Hackathon não encontrado no sistema");
         }
 
+        Hackathon hackathon = hackathonOptional.get();
 
         if(subscribeTeam.getParticipantsEmails().size() > hackathon.getNumberParticipantsTeam()) {
             throw new TeamMembersLimitExceededException("Limite de membros da equipe excedido", hackathon.getNumberParticipantsTeam());
@@ -77,8 +71,8 @@ public class TeamServiceImpl implements TeamService {
         team.setHackathon(hackathon);
         team.setDate(new Date(System.currentTimeMillis()));
 
-        for (Email email : subscribeTeam.getParticipantsEmails()) {
-            Participant participantDuplicate = teamRepository.findParticipantWithNameEqualInOtherTeamsOfHackathon(hackathon.getId(), email.getEmailAddress());
+        for (EmailDTO email : subscribeTeam.getParticipantsEmails()) {
+            Participant participantDuplicate = teamRepository.findParticipantEqualInHackathon(hackathon.getId(), email.getEmailAddress());
             if(participantDuplicate != null) {
                 throw new ResourceDuplicateException("Participante já pertence a uma outra equipe nesta hackathon, participante:" + participantDuplicate.getName());
             }
@@ -108,8 +102,8 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
-    public Boolean unsubscribeTeamInHackathon(Long participantId, Long teamId) {
-        Team team = teamRepository.findTeamByParticipant(teamId, participantId);
+    public Boolean unsubscribeTeam(Long participantId, Long teamId) {
+        Team team = teamRepository.findTeamFromParticipant(teamId, participantId);
         if(team == null) {
             throw new ResourceNotFoundException("Time não encontrado no sitema");
         }

@@ -1,4 +1,4 @@
-package br.com.ufc.service.impl;
+package br.com.ufc.service.implementation;
 
 import br.com.ufc.model.Paper;
 import br.com.ufc.model.Participant;
@@ -9,12 +9,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ParticipantServiceImpl implements ParticipantService {
+public class ParticipantServiceImplementation implements ParticipantService {
     @Autowired
     ParticipantRepository participantRepository;
 
     @Override
-    public Participant save(Participant participant) {
+    public Participant saveParticipant(Participant participant) {
         participant.setPhoto("default.png");
         participant.addPaper(Paper.PARTICIPANT);
         participant.setPassword(new BCryptPasswordEncoder().encode(participant.getPassword()));

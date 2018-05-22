@@ -1,4 +1,4 @@
-package br.com.ufc.service.impl;
+package br.com.ufc.service.implementation;
 
 import br.com.ufc.model.Organizer;
 import br.com.ufc.model.Paper;
@@ -9,13 +9,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class OrganizerServiceImpl implements OrganizerService {
+public class OrganizerServiceImplementation implements OrganizerService {
 
     @Autowired
     OrganizerRepository organizerRepository;
 
     @Override
-    public Organizer save(Organizer organizer) {
+    public Organizer saveOrganizer(Organizer organizer) {
         organizer.setPhoto("default.png");
         organizer.addPaper(Paper.PARTICIPANT);
         organizer.addPaper(Paper.ORGANIZER);

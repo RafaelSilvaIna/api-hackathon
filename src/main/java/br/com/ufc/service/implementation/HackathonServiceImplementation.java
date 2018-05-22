@@ -1,4 +1,4 @@
-package br.com.ufc.service.impl;
+package br.com.ufc.service.implementation;
 
 import br.com.ufc.error.ResourceNotFoundException;
 import br.com.ufc.model.*;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 
 @Service
-public class HackathonServiceImpl implements HackathonService {
+public class HackathonServiceImplementation implements HackathonService {
     @Autowired
     HackathonRepository hackathonRepository;
 
@@ -26,7 +26,7 @@ public class HackathonServiceImpl implements HackathonService {
     TeamRepository teamRepository;
 
     @Override
-    public Hackathon save(Hackathon hackathon, Long idOrganizer) {
+    public Hackathon saveHackathon(Hackathon hackathon, Long idOrganizer) {
 
         Organizer organizer = organizerRepository.findById(idOrganizer).get();
 
@@ -42,23 +42,23 @@ public class HackathonServiceImpl implements HackathonService {
     }
 
     @Override
-    public Page<Hackathon> getAllHackathonsByOrganizer(Pageable pageable, Long organizerId) {
-        return hackathonRepository.findAllHackathonsByOrganizer(organizerId, pageable);
+    public Page<Hackathon> getHackathonsFromOrganizer(Pageable pageable, Long organizerId) {
+        return hackathonRepository.findHackathonsFromOrganizer(organizerId, pageable);
     }
 
     @Override
-    public Page<Hackathon> listAllHackathonsActive(Pageable pageable) {
-        return hackathonRepository.listAllHackathonsActive(pageable);
+    public Page<Hackathon> getHackathonsActive(Pageable pageable) {
+        return hackathonRepository.findHackathonsActive(pageable);
     }
 
     @Override
-    public Hackathon getHackathonByOrganizer(Long hackathonId, Long organizerId) {
-        return hackathonRepository.findHackathonByOrganizer(hackathonId, organizerId);
+    public Hackathon getHackathonFromOrganizer(Long hackathonId, Long organizerId) {
+        return hackathonRepository.getHackathonFromOrganizer(hackathonId, organizerId);
     }
 
     @Override
-    public Boolean deleteHackathonByOrganizer(Long hackathonId, Long organizerId) {
-        Hackathon hackathon = hackathonRepository.findHackathonByOrganizer(hackathonId, organizerId);
+    public Boolean removeHackathon(Long hackathonId, Long organizerId) {
+        Hackathon hackathon = hackathonRepository.getHackathonFromOrganizer(hackathonId, organizerId);
         if(hackathon == null) {
             throw new ResourceNotFoundException("Hackathon não encontrado no sistema");
         }
@@ -67,8 +67,8 @@ public class HackathonServiceImpl implements HackathonService {
     }
 
     @Override
-    public Hackathon updateHackathonByOrganizer(Long organizerId, Hackathon hackathon) {
-        Hackathon hackathonPersist = getHackathonByOrganizer(hackathon.getId(), organizerId);
+    public Hackathon updateHackathon(Long organizerId, Hackathon hackathon) {
+        Hackathon hackathonPersist = getHackathonFromOrganizer(hackathon.getId(), organizerId);
 
         if(hackathonPersist == null) {
             throw new ResourceNotFoundException("Hackathon não encontrado no sistema");

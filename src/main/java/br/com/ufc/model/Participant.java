@@ -13,6 +13,9 @@ public class Participant extends User{
     @ManyToMany(mappedBy = "participants")
     private List<Team> teams;
 
+    public Participant() {
+    }
+
     public List<Team> getTeams() {
         return teams;
     }

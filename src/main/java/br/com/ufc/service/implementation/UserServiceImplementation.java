@@ -1,4 +1,4 @@
-package br.com.ufc.service.impl;
+package br.com.ufc.service.implementation;
 
 import br.com.ufc.model.User;
 import br.com.ufc.repository.UserRepository;
@@ -9,17 +9,17 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImplementation implements UserService {
     @Autowired
     private  UserRepository userRepository;
 
     @Override
-    public List<User> findAll() {
+    public List<User> getUsers() {
         return userRepository.findAll();
     }
 
     @Override
-    public User save(User user) {
+    public User saveUser(User user) {
         return userRepository.save(user);
     }
 

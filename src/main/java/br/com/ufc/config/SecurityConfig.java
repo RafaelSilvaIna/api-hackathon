@@ -1,6 +1,6 @@
 package br.com.ufc.config;
 
-import br.com.ufc.service.impl.CustomUserDetailService;
+import br.com.ufc.service.implementation.CustomUserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -24,8 +24,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/participants/sign-up").permitAll()
                 .antMatchers("/organizers/**").permitAll()
-                .antMatchers("/*/ptcp/**").hasRole("PARTICIPANT")
-                .antMatchers("/*/ognz/**").hasRole("ORGANIZER")
+                .antMatchers("/*/participant/**").hasRole("PARTICIPANT")
+                .antMatchers("/*/organizer/**").hasRole("ORGANIZER")
                 .and()
                 .addFilter(new JWTAuthenticationFilter(authenticationManager()))
                 .addFilter(new JWTAuthorizationFilter(authenticationManager(), customUserDetailService));
