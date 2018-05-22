@@ -21,7 +21,7 @@ public class OrganizerController {
     @Autowired
     HackathonService hackathonService;
 
-    @PostMapping
+    @PostMapping("/sign-up")
     public ResponseEntity<Organizer> save(@Valid @RequestBody Organizer organizer) {
         return  new ResponseEntity<>(organizerService.save(organizer), HttpStatus.OK);
     }
