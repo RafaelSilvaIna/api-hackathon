@@ -6,8 +6,8 @@ Repositório destinado a resolução do desafio proposto pela GreenMile.
 
 ### Permição de Usuários da API
 
-- `*/ognz/**` - Organizador
-- `*/ptcp/**` - Participante
+- `*/organizer/**` - Organizador
+- `*/participant/**` - Participante
 - `participants/sign-up` - Sem restrição
 - `/organizers/sign-up` - Sem restrição
 
@@ -15,27 +15,27 @@ Repositório destinado a resolução do desafio proposto pela GreenMile.
 
 **POST**
 
-- `/hackathons/ognz/` - Adiciona um Hackathon a um Organizador.
+- `/hackathons/organizer/` - Adiciona um Hackathon a um Organizador.
 
 **GET**
 
-- `/hackathons/ognz/` Retorna todas as Hackathons pertencentes ao Organizador Logado.
+- `/hackathons/organizer/` Retorna todas as Hackathons pertencentes ao Organizador Logado.
 
 **GET**
 
-- `/hackathons/ptcp/` Retorna todas as hackathons que ainda estão com as inscrições abertas.
+- `/hackathons/participant/` Retorna todas as hackathons que ainda estão com as inscrições abertas.
 
 **GET**
 
-- `/hackathons/ognz/{hackathon_id}` Retorna o hackathon caso pertença ao organizador logado.
+- `/hackathons/organizer/{hackathon_id}` Retorna o hackathon caso pertença ao organizador logado.
 
 **PUT**
 
-- `/hackathons/ognz/` - Atualiza uma hackathon que pertença ao organizador logado.
+- `/hackathons/organizer/` - Atualiza uma hackathon que pertença ao organizador logado.
 
 **DELETE**
 
-- `/hackathons/ognz/{hackathon_id}` Remove o hackathon caso pertença ao organizador logado.
+- `/hackathons/organizer/{hackathon_id}` Remove o hackathon caso pertença ao organizador logado.
 
 **POST**
 
@@ -47,16 +47,16 @@ Repositório destinado a resolução do desafio proposto pela GreenMile.
 
 **GET**
 
-- `/users/ptcp` - Lista todos os usuário do sistema.
+- `/users/participant` - Lista todos os usuário do sistema.
 
 **GET**
 
-- `/teams/ognz/hackathon/{hackathon_id}` - Retorna todos os de times de um hackathon que pertença ao organizador logado.
+- `/teams/organizer/hackathon/{hackathon_id}` - Retorna todos os de times de um hackathon que pertença ao organizador logado.
 
 **POST**
 
-- `/teams/ptcp/subscribe-team/hackathon/{hackathon_id}` - Inscreve um time em uma hackathon
+- `/teams/participant/subscribe-team/hackathon/{hackathon_id}` - Inscreve um time em uma hackathon
 
 **DELETE**
 
-- `/teams/ptcp/unsubscribe-team/{team_id}` - Cancela a inscrição do time desde que o participante logado seja um dos componentes do time.
+- `/teams/participant/unsubscribe-team/{team_id}` - Cancela a inscrição do time desde que o participante logado seja um dos componentes do time.
