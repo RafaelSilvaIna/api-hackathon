@@ -60,7 +60,7 @@ public class HackathonServiceImplementation implements HackathonService {
     public Boolean removeHackathon(Long hackathonId, Long organizerId) {
         Hackathon hackathon = hackathonRepository.getHackathonFromOrganizer(hackathonId, organizerId);
         if(hackathon == null) {
-            throw new ResourceNotFoundException("Hackathon não encontrado no sistema");
+            throw new ResourceNotFoundException("Hackathon not found");
         }
         hackathonRepository.delete(hackathon);
         return Boolean.TRUE;
@@ -71,7 +71,7 @@ public class HackathonServiceImplementation implements HackathonService {
         Hackathon hackathonPersist = getHackathonFromOrganizer(hackathon.getId(), organizerId);
 
         if(hackathonPersist == null) {
-            throw new ResourceNotFoundException("Hackathon não encontrado no sistema");
+            throw new ResourceNotFoundException("Hackathon not found");
         }
 
         hackathonPersist.setDescription(hackathon.getDescription());

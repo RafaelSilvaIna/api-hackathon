@@ -38,7 +38,7 @@ public class TeamServiceImplementation implements TeamService {
         Hackathon hackathon = hackathonRepository.getHackathonFromOrganizer(hackathonId, organizerId);
 
         if(hackathon == null) {
-            throw new ResourceNotFoundException("Hackathon não encontrado no sistema");
+            throw new ResourceNotFoundException("Hackathon not found");
         }
 
         return teamRepository.findTeamsFromHackathon(pageable, hackathonId);
@@ -50,19 +50,19 @@ public class TeamServiceImplementation implements TeamService {
         Optional<Hackathon> hackathonOptional = hackathonRepository.findById(subscribeTeam.getHackathonId());
 
         if(!hackathonOptional.isPresent()) {
-            throw new ResourceNotFoundException("Hackathon não encontrado no sistema");
+            throw new ResourceNotFoundException("Hackathon not found");
         }
 
         Hackathon hackathon = hackathonOptional.get();
 
         if(subscribeTeam.getParticipantsEmails().size() > hackathon.getNumberParticipantsTeam()) {
-            throw new TeamMembersLimitExceededException("Limite de membros da equipe excedido", hackathon.getNumberParticipantsTeam());
+            throw new TeamMembersLimitExceededException("Limit Team Members Exceeded", hackathon.getNumberParticipantsTeam());
         }
 
         Team teamDuplicate = teamRepository.findByName(subscribeTeam.getNameTeam());
 
         if(teamDuplicate != null) {
-            throw new ResourceDuplicateException("Já existe uma equipe inscrita com o mesmo nome nesta hackathon");
+            throw new ResourceDuplicateException("There is an inscribed team with the same name");
         }
 
         Team team = new Team();
@@ -74,17 +74,17 @@ public class TeamServiceImplementation implements TeamService {
         for (EmailDTO email : subscribeTeam.getParticipantsEmails()) {
             Participant participantDuplicate = teamRepository.findParticipantEqualInHackathon(hackathon.getId(), email.getEmailAddress());
             if(participantDuplicate != null) {
-                throw new ResourceDuplicateException("Participante já pertence a uma outra equipe nesta hackathon, participante:" + participantDuplicate.getName());
+                throw new ResourceDuplicateException("The participant already belongs to another team, participant:" + participantDuplicate.getName());
             }
 
             Participant participant = participantRepository.findByEmail(email.getEmailAddress());
 
             if(participant == null) {
-                throw new ResourceNotFoundException("Participante não encontrado no sitema, email:" + email.getEmailAddress());
+                throw new ResourceNotFoundException("Participant not found, email:" + email.getEmailAddress());
             }
 
             if(team.getParticipants().contains(participant)) {
-                throw new ResourceNotFoundException("Participante duplicado na equipe, participante:" + participant.getName());
+                throw new ResourceNotFoundException("Duplicate team member, participant:" + participant.getName());
             }
 
             team.getParticipants().add(participant);
@@ -105,10 +105,12 @@ public class TeamServiceImplementation implements TeamService {
     public Boolean unsubscribeTeam(Long participantId, Long teamId) {
         Team team = teamRepository.findTeamFromParticipant(teamId, participantId);
         if(team == null) {
-            throw new ResourceNotFoundException("Time não encontrado no sitema");
+            throw new ResourceNotFoundException("Time not found");
         }
         team.getHackathon().getTeams().remove(team);
         teamRepository.deleteById(team.getId());
         return Boolean.TRUE;
     }
+
+
 }
