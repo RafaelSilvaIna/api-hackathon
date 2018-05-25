@@ -51,7 +51,11 @@ Repositório destinado a resolução do desafio proposto pela GreenMile.
 
 **GET**
 
-- `/teams/organizer/hackathon/{hackathon_id}` - Retorna todos os de times de um hackathon que pertença ao organizador logado.
+- `/teams/organizer/hackathon/{hackathon_id}/order-name` - Retorna todos os de times de um hackathon que pertença ao organizador logado em ordem alfabética.
+
+**GET**
+
+- `/teams/organizer/hackathon/{hackathon_id}/order-date` - Retorna todos os de times de um hackathon que pertença ao organizador logado em ordem por data.
 
 **POST**
 

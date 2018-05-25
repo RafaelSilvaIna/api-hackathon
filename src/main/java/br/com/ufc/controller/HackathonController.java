@@ -6,6 +6,7 @@ import br.com.ufc.service.HackathonService;
 import br.com.ufc.service.OrganizerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,12 +35,12 @@ public class HackathonController {
     @GetMapping("/organizer")
     public ResponseEntity<Page<Hackathon>> getHackathonsFromOrganizer(Pageable pageable, Authentication authentication) {
         Long organizerId = ((Organizer) authentication.getPrincipal()).getId();
-        return new ResponseEntity<>(hackathonService.getHackathonsFromOrganizer(pageable, organizerId), HttpStatus.OK);
+        return new ResponseEntity<>(hackathonService.getHackathonsFromOrganizer(PageRequest.of(pageable.getPageNumber(), 10), organizerId), HttpStatus.OK);
     }
 
     @GetMapping("/participant")
     public ResponseEntity<Page<Hackathon>> getHackathonsActive(Pageable pageable) {
-        return new ResponseEntity<Page<Hackathon>>(hackathonService.getHackathonsActive(pageable), HttpStatus.OK);
+        return new ResponseEntity<Page<Hackathon>>(hackathonService.getHackathonsActive(PageRequest.of(pageable.getPageNumber(), 10)), HttpStatus.OK);
     }
 
     @GetMapping("/organizer/{hackathonId}")
@@ -60,5 +61,4 @@ public class HackathonController {
         Long organizerId = ((Organizer) authentication.getPrincipal()).getId();
         return new ResponseEntity<Hackathon>(hackathonService.updateHackathon(organizerId, hackathon), HttpStatus.OK);
     }
-
 }
