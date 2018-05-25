@@ -38,7 +38,6 @@ public class HackathonServiceImplementation implements HackathonService {
         organizer.getHackathons().add(hackathon);
 
         return hackathonRepository.save(hackathon);
-
     }
 
     @Override
@@ -59,9 +58,7 @@ public class HackathonServiceImplementation implements HackathonService {
     @Override
     public Boolean removeHackathon(Long hackathonId, Long organizerId) {
         Hackathon hackathon = hackathonRepository.getHackathonFromOrganizer(hackathonId, organizerId);
-        if(hackathon == null) {
-            throw new ResourceNotFoundException("Hackathon not found");
-        }
+        verifyIfHackathonExists(hackathon);
         hackathonRepository.delete(hackathon);
         return Boolean.TRUE;
     }
@@ -70,9 +67,7 @@ public class HackathonServiceImplementation implements HackathonService {
     public Hackathon updateHackathon(Long organizerId, Hackathon hackathon) {
         Hackathon hackathonPersist = getHackathonFromOrganizer(hackathon.getId(), organizerId);
 
-        if(hackathonPersist == null) {
-            throw new ResourceNotFoundException("Hackathon not found");
-        }
+        verifyIfHackathonExists(hackathonPersist);
 
         hackathonPersist.setDescription(hackathon.getDescription());
         hackathonPersist.setLocal(hackathon.getLocal());
@@ -84,6 +79,12 @@ public class HackathonServiceImplementation implements HackathonService {
 
         return hackathonRepository.save(hackathonPersist);
 
+    }
+
+    private void verifyIfHackathonExists(Hackathon hackathon) {
+        if (hackathon == null) {
+            throw new ResourceNotFoundException("Hackathon not found");
+        }
     }
 
 

@@ -49,21 +49,13 @@ public class TeamServiceImplementation implements TeamService {
 
         Optional<Hackathon> hackathonOptional = hackathonRepository.findById(subscribeTeam.getHackathonId());
 
-        if(!hackathonOptional.isPresent()) {
-            throw new ResourceNotFoundException("Hackathon not found");
-        }
+        verifyIfHackathonExists(hackathonOptional);
 
         Hackathon hackathon = hackathonOptional.get();
 
-        if(subscribeTeam.getParticipantsEmails().size() > hackathon.getNumberParticipantsTeam()) {
-            throw new TeamMembersLimitExceededException("Limit Team Members Exceeded", hackathon.getNumberParticipantsTeam());
-        }
+        verifyIfTeamSizeExceedsLimit(subscribeTeam.getParticipantsEmails().size(), hackathon.getNumberParticipantsTeam());
 
-        Team teamDuplicate = teamRepository.findByName(subscribeTeam.getNameTeam());
-
-        if(teamDuplicate != null) {
-            throw new ResourceDuplicateException("There is an inscribed team with the same name");
-        }
+        verifyIfTeamIsDuplicat(teamRepository.findByName(subscribeTeam.getNameTeam()));
 
         Team team = new Team();
         team.setParticipants(new ArrayList<Participant>());
@@ -72,20 +64,14 @@ public class TeamServiceImplementation implements TeamService {
         team.setDate(new Date(System.currentTimeMillis()));
 
         for (EmailDTO email : subscribeTeam.getParticipantsEmails()) {
-            Participant participantDuplicate = teamRepository.findParticipantEqualInHackathon(hackathon.getId(), email.getEmailAddress());
-            if(participantDuplicate != null) {
-                throw new ResourceDuplicateException("The participant already belongs to another team, participant:" + participantDuplicate.getName());
-            }
+
+            verifyIfParticipantIsDuplicat(teamRepository.findParticipantEqualInHackathon(hackathon.getId(), email.getEmailAddress()));
 
             Participant participant = participantRepository.findByEmail(email.getEmailAddress());
 
-            if(participant == null) {
-                throw new ResourceNotFoundException("Participant not found, email:" + email.getEmailAddress());
-            }
+            verifyIfParticipantExists(participant, email);
 
-            if(team.getParticipants().contains(participant)) {
-                throw new ResourceNotFoundException("Duplicate team member, participant:" + participant.getName());
-            }
+            verifyIfParticipantIsDuplicatInTeam(team, participant);
 
             team.getParticipants().add(participant);
 
@@ -112,5 +98,41 @@ public class TeamServiceImplementation implements TeamService {
         return Boolean.TRUE;
     }
 
+
+    private void verifyIfHackathonExists(Optional<Hackathon> hackathon) {
+        if(!hackathon.isPresent()) {
+            throw new ResourceNotFoundException("Hackathon not found");
+        }
+    }
+
+    private void verifyIfTeamSizeExceedsLimit(Integer sizeTeam, Integer limit) {
+        if(sizeTeam > limit) {
+            throw new TeamMembersLimitExceededException("Limit Team Members Exceeded", limit);
+        }
+    }
+
+    private void verifyIfTeamIsDuplicat(Team team) {
+        if(team == null) {
+            throw new ResourceDuplicateException("There is an inscribed team with the same name");
+        }
+    }
+
+    private void verifyIfParticipantIsDuplicat(Participant participant) {
+        if(participant == null) {
+            throw new ResourceDuplicateException("The participant already belongs to another team, participant:" + participant.getName());
+        }
+    }
+
+    private void verifyIfParticipantExists(Participant participant, EmailDTO email) {
+        if (participant == null) {
+            throw new ResourceNotFoundException("Participant not found, email:" + email.getEmailAddress());
+        }
+    }
+
+    private void verifyIfParticipantIsDuplicatInTeam(Team team, Participant participant) {
+        if(team.getParticipants().contains(participant)) {
+            throw new ResourceNotFoundException("Duplicate team member, participant:" + participant.getName());
+        }
+    }
 
 }
