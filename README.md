@@ -15,6 +15,10 @@ Repositório destinado a resolução do desafio proposto pela GreenMile.
 
 **POST**
 
+- `/login` - Realiza o login e retornar um token de autenticação.
+
+**POST**
+
 - `/hackathons/organizer/` - Adiciona um Hackathon a um Organizador.
 
 **GET**
