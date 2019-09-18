@@ -1,8 +1,6 @@
-# `Desafio GreenMile`
+# `Portal hackathon`
 
-Repositório destinado a resolução do desafio proposto pela GreenMile.
-
-
+API para gerenciamento de hackathons.
 
 ### Permição de Usuários da API
 
