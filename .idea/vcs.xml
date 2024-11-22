@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
+<project version="4" xmlns="http://www.jetbrains.com/idea/schema/project"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.jetbrains.com/idea/schema/project http://www.jetbrains.com/idea/schema/project-4.xsd">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
   </component>
